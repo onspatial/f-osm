@@ -11,7 +11,7 @@ import os
 import sys
 
 
-def get_raw_data_df(raw_data_path="data/raw_data.csv", refresh=False):
+def get_raw_data_df(raw_data_path="data/foursquare.csv", refresh=False):
     if os.path.exists(raw_data_path) and not refresh:
         print(f"File {raw_data_path} already exists. Loading existing data.")
         raw_data_df = pandas.read_csv(raw_data_path)
@@ -65,7 +65,7 @@ def initialize():
 
 if __name__ == "__main__":
     initialize()
-    raw_data_path = "data/raw_data.csv"
+    raw_data_path = "data/foursquare.csv"
     raw_data_df = get_raw_data_df()
     print(f"Loaded {len(raw_data_df)} rows and {len(raw_data_df.columns)} columns from {raw_data_path}")
     print(raw_data_df.head())
