@@ -1,7 +1,5 @@
 # Reproducing Results from the Paper
 
-# Reproducing Results from the Paper
-
 This document outlines the steps required to reproduce the results presented in our paper:  
 **_"F-OSM: Enriched Foursquare POI Dataset with OpenStreetMap Available as Structured and Graph Data"_**.
 
