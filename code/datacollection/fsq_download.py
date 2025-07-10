@@ -39,12 +39,9 @@ def get_raw_data_df(raw_data_path="data/foursquare.csv", refresh=False):
 def download_foursquare():
     print("Downloading the parquet files...")
     # os.system("sudo dnf install -y awscli2")
-    if not os.path.exists(f"data/downloaded/places"):
-        os.system("aws s3 cp --no-sign s3://fsq-os-places-us-east-1/release/dt=2025-02-06/places/parquet data/downloaded/places/ --recursive")
-        os.system("aws s3 cp --no-sign s3://fsq-os-places-us-east-1/release/dt=2025-02-06/categories/parquet data/downloaded/categories/ --recursive")
-        print("Download complete.")
-    else:
-        print("Already Downloaded...")
+    os.system("aws s3 cp --no-sign s3://fsq-os-places-us-east-1/release/dt=2025-07-08/places/parquet data/downloaded/places/ --recursive")
+    os.system("aws s3 cp --no-sign s3://fsq-os-places-us-east-1/release/dt=2025-07-08/categories/parquet data/downloaded/categories/ --recursive")
+    print("Download complete.")
 
 def make_directories():
     try:
