@@ -42,10 +42,10 @@ Make sure your environment matches these versions to avoid compatibility issues 
 
 ### Foursquare Data
 
-To obtain the Foursquare POI data, run the script [**fsq_download.py**](code/datacollection/fsq_download.py). This script downloads the complete dataset and saves it in the `data/` directory as a single file named `foursquare.csv`.
+To obtain the Foursquare POI data, run the script [**foursquare.py**](code/datacollection/foursquare.py). This script downloads the complete dataset and saves it in the `data/` directory as a single file named `foursquare.csv`. We drop the geometry column (`geom`) from the dataset to avoid datatype issues during import into PostgreSQL and name the cleaned file `foursquare_clean.csv`. This prevents binary-string errors during import. Geometries are later reconstructed using the latitude and longitude fields.
 
 ```bash
-python code/datacollection/fsq_download.py
+python code/datacollection/foursquare.py
 ```
 
 **Memory Note:** The script concatenates large amounts of data and may consume substantial memory. If you encounter performance issues, we recommend using the provided Bash script [concat.sh](code/datacollection/concat.sh), which performs more memory-efficient concatenation:
@@ -53,8 +53,6 @@ python code/datacollection/fsq_download.py
 ```bash
 bash code/datacollection/concat.sh
 ```
-
-Before importing the dataset into PostgreSQL, we sanitize the `geom` column in `foursquare.csv` by setting its value to `""`. This prevents binary-string errors during import. Geometries are later reconstructed using the latitude and longitude fields.
 
 ### OpenStreetMap (OSM) Data:
 
@@ -104,7 +102,7 @@ Then, connect to the database using the following command:
 
 ### Foursquare Data:
 
-To import the [downloaded](code/datacollection/fsq_download.sql) Foursquare data into PostgreSQL, we first create the `foursquare` table in the `fsq-osm` database. You can use the following SQL command to create the table:
+To import the [downloaded](code/datacollection/foursquare.sql) Foursquare data into PostgreSQL, we first create the `foursquare` table in the `fsq-osm` database. You can use the following SQL command to create the table:
 
 ```sql
  CREATE TABLE foursquare (
@@ -120,14 +118,14 @@ To import the [downloaded](code/datacollection/fsq_download.sql) Foursquare data
     facebook_id         text, instagram           text,
     twitter             text, fsq_category_ids    text,
     fsq_category_labels text, placemaker_url      text,
-    geom                text, bbox                text
+    bbox                text
     );
 ```
 
-Then we can import the data from the `foursquare.csv` file into the `foursquare` table using the following command:
+Then we can import the data from the `foursquare_clean.csv` file into the `foursquare` table using the following command:
 
 ```sql
-\copy foursquare FROM 'foursquare.csv' WITH ( FORMAT csv, HEADER, DELIMITER ',', QUOTE '"', ESCAPE '"', NULL '' );
+\copy foursquare FROM 'foursquare_clean.csv' WITH ( FORMAT csv, HEADER, DELIMITER ',', QUOTE '"', ESCAPE '"', NULL '' );
 ```
 
 ### OSM Data:
