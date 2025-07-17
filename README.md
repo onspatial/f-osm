@@ -61,10 +61,10 @@ To enrich the Foursquare data with geographic features, we use the global OSM da
 We downloaded using the following command:
 
 ```bash
-wget https://osm-planet-us-west-2.s3.dualstack.us-west-2.amazonaws.com/planet/pbf/2025/planet-250414.osm.pbf
+wget https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf
 ```
 
-Save the file in a designated directory (e.g., `data/osm/`) for subsequent processing.
+Save the file in a designated directory (e.g., `osm/data`) for subsequent processing.
 
 ## Import Data into PostgreSQL
 
@@ -105,21 +105,34 @@ Then, connect to the database using the following command:
 To import the [downloaded](code/datacollection/foursquare.sql) Foursquare data into PostgreSQL, we first create the `foursquare` table in the `fsq-osm` database. You can use the following SQL command to create the table:
 
 ```sql
- CREATE TABLE foursquare (
-    fsq_place_id            text, fsq_name                text,
-    fsq_latitude            text, fsq_longitude           text,
-    fsq_address             text, fsq_locality            text,
-    fsq_region              text, fsq_postcode            text,
-    fsq_admin_region        text, fsq_post_town           text,
-    fsq_po_box              text, fsq_country             text,
-    fsq_date_created        text, fsq_date_refreshed      text,
-    fsq_date_closed         text, fsq_tel                 text,
-    fsq_website             text, fsq_email               text,
-    fsq_facebook_id         text, fsq_instagram           text,
-    fsq_twitter             text, fsq_category_ids       text,
-    fsq_category_labels     text, fsq_placemaker_url      text,
-    fsq_bbox                text
-    );
+CREATE TABLE foursquare (
+      fsq_place_id        text,
+      fsq_name            text,
+      fsq_latitude        text,
+      fsq_longitude       text,
+      fsq_address         text,
+      fsq_locality        text,
+      fsq_region          text,
+      fsq_postcode        text,
+      fsq_admin_region    text,
+      fsq_post_town       text,
+      fsq_po_box          text,
+      fsq_country         text,
+      fsq_date_created    text,
+      fsq_date_refreshed  text,
+      fsq_date_closed     text,
+      fsq_tel             text,
+      fsq_website         text,
+      fsq_email           text,
+      fsq_facebook_id     text,
+      fsq_instagram       text,
+      fsq_twitter         text,
+      fsq_category_ids    text,
+      fsq_category_labels text,
+      fsq_placemaker_url  text,
+      fsq_unresolved_flags text,
+      fsq_bbox            text
+);
 ```
 
 Then we can import the data from the `foursquare_clean.csv` file into the `foursquare` table using the following command:
