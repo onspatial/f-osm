@@ -2,6 +2,7 @@ import pandas
 import pyarrow.parquet as pyarrow_parquet
 import os
 import time
+import csv
 def print_time(*args, **kwargs):
     current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     print(f"[{current_time}]: ", *args, **kwargs)
@@ -64,7 +65,8 @@ def save_clean_data(raw_data_df, clean_data_path):
     clean_data_df = raw_data_df.copy()
     clean_data_df.columns = [f"fsq_{col}" if not col.startswith("fsq_") else col for col in clean_data_df.columns]
     print_time(f"Cleaned column names: {clean_data_df.columns.tolist()}")
-    clean_data_df.to_csv(clean_data_path, index=False)
+    # use "" for all string columns
+    clean_data_df.to_csv(clean_data_path, index=False, quoting=csv.QUOTE_ALL, quotechar='"')
 
 if __name__ == "__main__":
     initialize()
