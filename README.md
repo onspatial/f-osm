@@ -151,10 +151,16 @@ You can install it using the following command:
 pip install nominatim-db nominatim-api
 ```
 
+Since we are importing the entire planet data, it is recommended to use a flatnode file to speed up the import process.
+
+```bash
+NOMINATIM_FLATNODE_FILE="/path/to/flatnode.file"
+```
+
 Then, you can use the following command to import the OSM data into PostgreSQL:
 
 ```bash
-nominatim import --osm-file data/osm/planet-250414.osm.pbf
+PGPASSWORD=your_psql_user_password nominatim import --osm-file ./planet-latest.osm.pbf
 ```
 
 For the most recent version and detailed instructions, please refer to the official documentation on the [Nominatim website](https://nominatim.org)
