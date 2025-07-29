@@ -165,21 +165,35 @@ PGPASSWORD=your_psql_user_password nominatim import --osm-file ./planet-latest.o
 
 For the most recent version and detailed instructions, please refer to the official documentation on the [Nominatim website](https://nominatim.org)
 
-After importing, we only use the places that have address and name from the OSM data:
+After importing, you need to connect to the database:
+
+```bash
+psql -d nominatim
+```
+
+we only use the places that have address and name from the OSM data:
 
 ```sql
-CREATE TABLE places_filtered AS
+CREATE TABLE place_filtered AS
+SELECT
+    p.osm_id AS osm_id,
+    p.class AS osm_class,
+    p.type AS osm_type,
+    p.name AS osm_name,
+    p.address AS osm_address,
+    p.extratags AS osm_extratags,
+    p.geometry AS osm_geometry,
+    ST_Y(ST_Centroid(p.geometry)) AS osm_latitude,
+    ST_X(ST_Centroid(p.geometry)) AS osm_longitude
+FROM place p
+WHERE class <> 'highway' AND name IS NOT NULL;
 
-SELECT p.*, n.*, (n.lat::numeric  / 10000000) AS lat_deg, (n.lon::numeric  / 10000000) AS lon_deg
-FROM place p JOIN planet_osm_nodes n
-ON n.id = p.osm_id
-WHERE p.address IS NOT NULL and p.osm_name IS NOT NULL;
 ```
 
 Then we export the data to a CSV file using the following command:
 
 ```sql
-\copy places_filtered TO 'osm.csv' CSV HEADER
+\copy place_filtered TO 'osm.csv' CSV HEADER
 ```
 
 Next, we import the `osm` data in the `fsq-osm` database. You can use the following SQL command:
