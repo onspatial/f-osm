@@ -198,6 +198,11 @@ Then we export the data to a CSV file using the following command:
 
 Next, we import the `osm` data in the `fsq-osm` database. You can use the following SQL command:
 
+
+```bash
+psql -d fsq-osm
+```
+
 ```sql
 CREATE TABLE osm (
   osm_id BIGINT,
