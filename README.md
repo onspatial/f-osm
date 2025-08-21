@@ -241,21 +241,31 @@ We can add the `fsq_geom` column to the `foursquare` table using the following S
 ```sql
 ALTER TABLE foursquare ADD COLUMN fsq_geom geometry(Point, 4326);
 UPDATE foursquare
-SET geom = ST_SetSRID(
-                ST_MakePoint(longitude::double precision, latitude::double precision)
+SET fsq_geom = ST_SetSRID(
+                ST_MakePoint(fsq_longitude::double precision, fsq_latitude::double precision)
                 ,4326 )
-WHERE latitude ~ '^\-?\d+(\.\d+)?$' AND longitude ~ '^\-?\d+(\.\d+)?$';
+WHERE fsq_latitude ~ '^\-?\d+(\.\d+)?$' AND fsq_longitude ~ '^\-?\d+(\.\d+)?$';
 ```
 
-For the `osm` table, we use the same command to add the `osm_geom` column. Please note that the `latitude` and `longitude` columns in the `osm` table are named `lat_deg` and `lon_deg`, respectively.
+For the `osm` table, we use the same command to add the `osm_geom` column. Please note that the `latitude` and `longitude` columns in the `osm` table are named `osm_latitude` and `osm_longitude`, respectively.
+
+```sql
+ALTER TABLE osm ADD COLUMN osm_geom geometry(Point, 4326);
+UPDATE osm
+SET osm_geom = ST_SetSRID(
+                ST_MakePoint(osm_longitude::double precision, osm_latitude::double precision)
+                ,4326 )
+WHERE osm_latitude ~ '^\-?\d+(\.\d+)?$' AND osm_longitude ~ '^\-?\d+(\.\d+)?$';
+```
+
 
 ## Adding Indexes:
 
 To speed up the queries, we add indexes to the `geom` column in both tables. You can use the following SQL commands to add the indexes:
 
 ```sql
-CREATE INDEX IF NOT EXISTS idx_foursquare_geom ON foursquare USING GIST (geom);
-CREATE INDEX IF NOT EXISTS idx_osm_geom ON osm USING GIST (geom);
+CREATE INDEX IF NOT EXISTS idx_fsq_geom ON foursquare USING GIST (fsq_geom);
+CREATE INDEX IF NOT EXISTS idx_osm_geom ON osm USING GIST (osm_geom);
 ```
 
 ## Joining Foursquare and OSM Data:
