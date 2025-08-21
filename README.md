@@ -200,21 +200,15 @@ Next, we import the `osm` data in the `fsq-osm` database. You can use the follow
 
 ```sql
 CREATE TABLE osm (
-  osm_type TEXT,
   osm_id BIGINT,
-  class TEXT,
-  type TEXT,
-  admin_level INTEGER,
+  osm_class TEXT,
+  osm_type TEXT,
   osm_name TEXT,
   osm_address TEXT,
-  extratags TEXT,
-  geometry GEOMETRY,
-  id BIGINT,
-  lat BIGINT,
-  lon BIGINT,
-  tags TEXT,
-  lat_deg DOUBLE PRECISION,
-  lon_deg DOUBLE PRECISION
+  osm_extratags TEXT,
+  osm_geometry GEOMETRY,
+  osm_latitude DOUBLE PRECISION,
+  osm_longitude DOUBLE PRECISION
 );
 ```
 
