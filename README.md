@@ -277,7 +277,7 @@ CREATE TABLE fsq_osm AS
 SELECT f.*, o.*
 FROM foursquare f
 LEFT OUTER JOIN osm o
-ON ST_DWithin(f.fsq_geom, o.osm_geom, 0.001)
+ON ST_DWithin(f.fsq_geom, o.osm_geom, 0.001);
 
 ```
 
@@ -303,7 +303,7 @@ To calculate the similarity between the Foursquare and OSM data, we use two appr
 Using the name_similarity_score, you can see how similar the names are and using coordinate distance you can see how close the location in spatially.
 
 ```sql
-ALTER TABLE fsq_osm ADD COLUMN name_similarity_score DOUBLE PRECISION;
+ALTER TABLE fsq_osm ADD COLUMN fsq_osm_name_similarity_score DOUBLE PRECISION;
 ALTER TABLE fsq_osm ADD COLUMN fsq_osm_distance DOUBLE PRECISION;
 ```
 
@@ -314,7 +314,7 @@ SET fsq_osm_distance = ST_Distance(fsq_geom, osm_geom);
 
 ```sql
 UPDATE fsq_osm
-SET name_similarity_score = GREATEST(similarity(LOWER(fsq_name), LOWER(osm_name)), 0.0);
+SET fsq_osm_name_similarity_score = GREATEST(similarity(LOWER(fsq_name), LOWER(osm_name)), 0.0);
 ```
 
 # Exporting the Final Dataset
