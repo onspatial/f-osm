@@ -108,8 +108,8 @@ To import the [downloaded](code/datacollection/foursquare.sql) Foursquare data i
 CREATE TABLE foursquare (
       fsq_place_id        text,
       fsq_name            text,
-      fsq_latitude        text,
-      fsq_longitude       text,
+      fsq_latitude        DOUBLE PRECISION,
+      fsq_longitude       DOUBLE PRECISION,
       fsq_address         text,
       fsq_locality        text,
       fsq_region          text,
@@ -241,10 +241,7 @@ We can add the `fsq_geom` column to the `foursquare` table using the following S
 ```sql
 ALTER TABLE foursquare ADD COLUMN fsq_geom geometry(Point, 4326);
 UPDATE foursquare
-SET fsq_geom = ST_SetSRID(
-                ST_MakePoint(fsq_longitude::double precision, fsq_latitude::double precision)
-                ,4326 )
-WHERE fsq_latitude ~ '^\-?\d+(\.\d+)?$' AND fsq_longitude ~ '^\-?\d+(\.\d+)?$';
+SET fsq_geom = ST_SetSRID(ST_MakePoint(fsq_longitude::double precision, fsq_latitude::double precision), 4326);
 ```
 
 For the `osm` table, we use the same command to add the `osm_geom` column. Please note that the `latitude` and `longitude` columns in the `osm` table are named `osm_latitude` and `osm_longitude`, respectively.
@@ -252,13 +249,8 @@ For the `osm` table, we use the same command to add the `osm_geom` column. Pleas
 ```sql
 ALTER TABLE osm ADD COLUMN osm_geom geometry(Point, 4326);
 UPDATE osm
-SET osm_geom = ST_SetSRID(
-                ST_MakePoint(osm_longitude::double precision, osm_latitude::double precision)
-                ,4326 )
-WHERE osm_latitude ~ '^\-?\d+(\.\d+)?$' AND osm_longitude ~ '^\-?\d+(\.\d+)?$';
+SET osm_geom = ST_SetSRID(ST_MakePoint(osm_longitude::double precision, osm_latitude::double precision), 4326);
 ```
-
-
 ## Adding Indexes:
 
 To speed up the queries, we add indexes to the `geom` column in both tables. You can use the following SQL commands to add the indexes:
