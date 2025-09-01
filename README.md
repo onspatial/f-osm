@@ -218,12 +218,6 @@ Then we can import the data from the `osm.csv` file into the `osm` table using t
 \copy osm FROM 'osm.csv' CSV HEADER
 ```
 
-```sql
-CREATE EXTENSION IF NOT EXISTS hstore;
-ALTER TABLE osm ADD COLUMN osm_name_text text;
-UPDATE osm
-SET osm_name_text = (osm_name::hstore)->>'name';
-```
 Now we have the `foursquare` and `osm` tables in the `fsq-osm` database.
 
 # Preprocessing the Data
@@ -275,7 +269,7 @@ CREATE TABLE fsq_osm AS
 SELECT f.*, o.*
 FROM foursquare f
 LEFT OUTER JOIN osm o
-ON ST_DWithin(f.fsq_geom, o.osm_geom, 0.001);
+ON ST_DWithin(f.fsq_geom, o.osm_geom, 0.0005);
 
 ```
 
