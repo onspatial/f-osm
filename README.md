@@ -220,9 +220,9 @@ Then we can import the data from the `osm.csv` file into the `osm` table using t
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS hstore;
-ALTER TABLE osm
-ALTER COLUMN osm_name TYPE hstore
-  USING osm_name::hstore;
+ALTER TABLE osm ADD COLUMN osm_name_text text;
+UPDATE osm
+SET osm_name_text = (osm_name::hstore)->>'name';
 ```
 Now we have the `foursquare` and `osm` tables in the `fsq-osm` database.
 
