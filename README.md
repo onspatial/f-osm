@@ -283,8 +283,6 @@ ON ST_DWithin(f.fsq_geom, o.osm_geom, 0.001)
 WHERE f.fsq_country='US';
 ```
 
-This will create a new table called `fsq_osm_usa` that contains the joined data from both tables for locations in the United States.
-
 # Calculating the Similarity:
 
 To calculate the similarity between the Foursquare and OSM data, we use two approaches. The distance between longitude and latitude of foursquare and osm as a separate column in the data. We also provide a similarity score between the name of the place in foursquare and osm.
