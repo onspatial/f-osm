@@ -272,9 +272,7 @@ LEFT OUTER JOIN osm o
 ON ST_DWithin(f.fsq_geom, o.osm_geom, 0.0005);
 ```
 
-This SQL command creates a new table called `fsq_osm` that contains the joined data from both tables. The `ST_DWithin` function checks if the geometries of the Foursquare and OSM points are within 0.001 degrees (approximately 100 meters) of each other.
-
-As a case study, we can use the following SQL command to only select the data for 'US' country:
+As a case study, we can use the following SQL command to select only the data for the United States. This command creates a new table called fsq_osm_usa that contains the joined records from both datasets restricted to the U.S. The ST_DWithin function ensures that the geometries of the Foursquare and OSM points are within 0.001 degrees (approximately 100 meters) of each other.
 
 ```sql
 CREATE TABLE fsq_osm_usa AS
