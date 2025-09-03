@@ -288,7 +288,7 @@ WHERE f.fsq_country='US';
 In the fsq_osm table, osm_name and osm_extratags are stored as text that contains hstore-formatted strings. To compare Foursquare and OSM names, extract the OSM name into a plain TEXT column while leaving the address as hstore-formatted text to save space.
 
 ```sql
-UPDATE fsq_osm SET osm_name = (osm_name::hstore -> 'name') WHERE osm_name LIKE '%=>"%"%';
+UPDATE fsq_osm SET osm_name = (osm_name::hstore -> 'name');
 ```
 
 
