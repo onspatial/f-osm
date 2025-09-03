@@ -283,6 +283,15 @@ ON ST_DWithin(f.fsq_geom, o.osm_geom, 0.001)
 WHERE f.fsq_country='US';
 ```
 
+## Data Type Conversion
+
+In the fsq_osm table, osm_name and osm_extratags are stored as text that contains hstore-formatted strings. To compare Foursquare and OSM names, extract the OSM name into a plain TEXT column while leaving the address as hstore-formatted text to save space.
+
+```sql
+UPDATE fsq_osm SET osm_name = (osm_name::hstore -> 'name') WHERE osm_name LIKE '%=>"%"%';
+```
+
+
 # Calculating the Similarity:
 
 To calculate the similarity between the Foursquare and OSM data, we use two approaches. The distance between longitude and latitude of foursquare and osm as a separate column in the data. We also provide a similarity score between the name of the place in foursquare and osm.
