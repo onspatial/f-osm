@@ -256,8 +256,11 @@ SET osm_geom = ST_SetSRID(ST_MakePoint(osm_longitude::double precision, osm_lati
 To speed up the queries, we add indexes to the `geom` column in both tables. You can use the following SQL commands to add the indexes:
 
 ```sql
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE INDEX IF NOT EXISTS idx_fsq_geom ON foursquare USING GIST (fsq_geom);
 CREATE INDEX IF NOT EXISTS idx_osm_geom ON osm USING GIST (osm_geom);
+CREATE INDEX IF NOT EXISTS idx_fsq_name_trgm ON fsq_osm USING gin (fsq_name gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_osm_name_text_trgm ON fsq_osm USING gin (osm_name gin_trgm_ops);
 ```
 
 ## Joining Foursquare and OSM Data:
