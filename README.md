@@ -262,7 +262,7 @@ CREATE INDEX IF NOT EXISTS idx_osm_geom ON osm USING GIST (osm_geom);
 
 ## Joining Foursquare and OSM Data:
 
-To join the Foursquare and OSM data, we can use the `ST_DWithin` function to find the points that are within a certain distance from each other. We can use a distance of 100 meters as a threshold to consider two points as the same location.
+To join the Foursquare and OSM data, we can use the ST_DWithin function to identify points that fall within a specified distance of each other. A threshold of 0.0005 degrees (approximately 55 meters) can be used to treat two points as the same location. Using a larger distance will produce a much larger joined table.
 
 ```sql
 CREATE TABLE fsq_osm AS
@@ -270,7 +270,6 @@ SELECT f.*, o.*
 FROM foursquare f
 LEFT OUTER JOIN osm o
 ON ST_DWithin(f.fsq_geom, o.osm_geom, 0.0005);
-
 ```
 
 This SQL command creates a new table called `fsq_osm` that contains the joined data from both tables. The `ST_DWithin` function checks if the geometries of the Foursquare and OSM points are within 0.001 degrees (approximately 100 meters) of each other.
